@@ -1,0 +1,17 @@
+{
+    "name": "ddd/infortech-back",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jesús castillo",
+            "email": "jesuseduardocast18@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^3.9"
+    }
+}
