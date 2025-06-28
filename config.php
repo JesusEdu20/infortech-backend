@@ -2,7 +2,7 @@
 
 return [
     'host' => 'localhost',
-    'database' => 'datanetv_app',
+    'database' => '',
     'username' => 'root',
     'password' => '29032002',
     'charset' => 'utf8mb4',
