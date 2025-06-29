@@ -1,4 +1,10 @@
 <?php
+
+use App\Database\Database;
+use App\Database\QueryBuilder;
+use App\Models\User;
+use App\Models\Model;
+
 class UserController
 {
     public function index()
@@ -18,5 +24,15 @@ class UserController
             'usuario_id' => $params['id'],
             'post_id' => $params['postId']
         ]);
+    }
+    public function more()
+    {
+        try {
+            $users = User::query()->where('id', '=', 1)->get();
+
+            print_r(json_encode($users));
+        } catch (Exception $e) {
+            echo "<p style='color:red;'>Error al seleccionar usuarios: " . $e->getMessage() . "</p>";
+        }
     }
 }

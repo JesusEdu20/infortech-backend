@@ -1,1 +1,4 @@
 /vendor/
+
+/config.md
+logs/app.log

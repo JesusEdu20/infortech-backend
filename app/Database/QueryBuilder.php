@@ -2,6 +2,7 @@
 
 namespace App\Database;
 
+
 use PDO;
 use PDOStatement;
 use Exception;
@@ -28,6 +29,10 @@ class QueryBuilder
         $this->pdo = $pdo ?? Database::getConnection();
     }
 
+    public function getBindings(): array
+    {
+        return $this->bindings;
+    }
 
     public function table(string $table): self
     {
@@ -119,7 +124,7 @@ class QueryBuilder
     }
 
 
-    public function insert(array $data): bool
+    public function insert(array $data): int
     {
         $this->type = 'insert';
         $columns = implode(', ', array_keys($data));
@@ -127,30 +132,45 @@ class QueryBuilder
         $this->bindings = array_values($data);
 
         $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
+        $this->runQuery($sql, $this->bindings);
 
-        return $this->runQuery($sql, $this->bindings)->rowCount() > 0;
+        $result = (int)$this->pdo->lastInsertId();
+        /* echo "Insertado con ID: {$result}"; */
+        return $result;
     }
 
 
     public function update(array $data): int
     {
+
+        /*  print_r($this->wheres); */
         $this->type = 'update';
+        $whereBindings = $this->bindings;
+
         $setClauses = [];
+        $setBindings = [];
+
         foreach ($data as $key => $value) {
             $setClauses[] = "{$key} = ?";
-            $this->bindings[] = $value;
+            $setBindings[] = $value;
+            /* $this->bindings[] = $value; */
         }
         $setClause = implode(', ', $setClauses);
 
 
-        $whereBindings = [];
-        foreach ($this->wheres as $where) {
+        /* foreach ($this->wheres as $where) {
             $whereBindings[] = $where['value'];
-        }
-        $this->bindings = array_merge(array_slice($this->bindings, 0, count($data)), $whereBindings);
+        } */
+        /* print_r($setBindings);
+        print_r($whereBindings); */
 
-
+        $finalBindings = array_merge($setBindings, $whereBindings);
+        /* print_r($this->bindings);
+        print_r($finalBindings); */
+        $this->bindings = $finalBindings;
+        /* $this->bindings = array_merge(array_slice($this->bindings, 1, count($data)), $whereBindings); */
         $sql = "UPDATE {$this->table} SET {$setClause}" . $this->buildWhereClause();
+
 
         return $this->runQuery($sql, $this->bindings)->rowCount();
     }

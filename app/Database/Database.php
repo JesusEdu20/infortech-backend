@@ -5,6 +5,7 @@ namespace App\Database;
 use PDO;
 use PDOException;
 
+
 class Database
 {
     private static ?PDO $instance = null;
@@ -12,6 +13,7 @@ class Database
 
     public static function setConfig(array $config): void
     {
+
         self::$config = $config;
     }
 

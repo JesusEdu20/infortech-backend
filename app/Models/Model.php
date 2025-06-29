@@ -33,7 +33,7 @@ abstract class Model
         return static::newQuery()->find($id, $columns);
     }
 
-    public static function create(array $data): bool
+    public static function create(array $data): int
     {
 
         if (!isset($data['created_at'])) {
@@ -42,7 +42,8 @@ abstract class Model
         if (!isset($data['updated_at'])) {
             $data['updated_at'] = date('Y-m-d H:i:s');
         }
-
-        return static::newQuery()->insert($data);
+        $result = static::newQuery()->insert($data);
+        /* echo $result; */
+        return $result;
     }
 }
