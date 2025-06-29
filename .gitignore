@@ -1,4 +1,4 @@
 /vendor/
 
-/config.md
+config.php
 logs/app.log
